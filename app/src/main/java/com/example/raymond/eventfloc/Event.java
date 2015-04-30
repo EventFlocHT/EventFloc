@@ -9,24 +9,32 @@ import java.util.Date;
  */
 public class Event {
     private int eventID;
-    private ArrayList<EventType> eventTypeList;
     private String eventLocation;
     private Date eventDate;
+    private String eventName;
     private String eventDescription;
     private String eventLink;
-    private Time eventStartTime;
-    private Time eventEndTime;
+    private Date eventStartTime;
+    private Date eventEndTime;
+
+
+
     private int societyID;
 
-    public Event(ArrayList<EventType> eventTypeList, String eventLocation, Date eventDate, String eventDescription,
-                 String eventLink, Time eventStartTime, Time eventEndTime) {
-        this.eventTypeList = eventTypeList;
+    public Event(String eventName, String eventLocation, Date eventDate, String eventDescription,
+                 String eventLink, Date eventStartTime, Date eventEndTime) {
+        this.eventName = eventName;
         this.eventLocation = eventLocation;
         this.eventDate = eventDate;
         this.eventDescription = eventDescription;
         this.eventLink = eventLink;
         this.eventStartTime = eventStartTime;
         this.eventEndTime = eventEndTime;
+    }
+
+    // Empty Constructor to delete
+    public Event() {
+
     }
 
     public int getEventID() {
@@ -61,6 +69,22 @@ public class Event {
         this.eventDescription = eventDescription;
     }
 
+    public int getSocietyID() {
+        return societyID;
+    }
+
+    public void setSocietyID(int societyID) {
+        this.societyID = societyID;
+    }
+
+    public String getEventName() {
+        return eventName;
+    }
+
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
+    }
+
     public String getEventLink() {
         return eventLink;
     }
@@ -69,19 +93,20 @@ public class Event {
         this.eventLink = eventLink;
     }
 
-    public Time getEventStartTime() {
+    public Date getEventStartTime() {
         return eventStartTime;
     }
 
-    public void setEventStartTime(Time eventStartTime) {
+    public void setEventStartTime(Date eventStartTime) {
         this.eventStartTime = eventStartTime;
     }
 
-    public Time getEventEndTime() {
+    public Date getEventEndTime() {
         return eventEndTime;
     }
 
-    public void setEventEndTime(Time eventEndTime) {
+    public void setEventEndTime(Date eventEndTime) {
         this.eventEndTime = eventEndTime;
     }
 }
+

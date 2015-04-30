@@ -8,6 +8,8 @@ public class EventType {
     private String eventType;
 
     public EventType(int eventTypeID, String eventType) {
+
+        //------should we just make up our own event id nums since you can't add new ones?
         this.eventTypeID = eventTypeID;
         this.eventType = eventType;
     }

@@ -1,5 +1,8 @@
 package com.example.raymond.eventfloc;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+
 /**
  * Created by RAYMOND on 18/04/2015.
  */
@@ -9,11 +12,15 @@ public class Student extends User {
     private String lastName;
 
 
-    public Student(int userID, String userEmail, char password, int studentID, String firstName, String lastName) {
-        super(userID, userEmail, password);
+    public Student(String userEmail, String password, int studentID, String firstName, String lastName) throws InvalidKeySpecException, NoSuchAlgorithmException {
+        super(userEmail, password);
         this.studentID = studentID;
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    //temp
+    public Student() {
     }
 
     public int getStudentID() {

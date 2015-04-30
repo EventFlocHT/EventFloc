@@ -16,13 +16,24 @@ public class Admin extends User {
      */
     public Admin(String userEmail, String password) throws InvalidKeySpecException, NoSuchAlgorithmException {
         super(userEmail, password);
+        //this.adminID = adminID;
     }
 
+    public Admin() {
+
+    }
+
+    /**
+     * Will be null in Java object but pk in database
+     * @return
+     */
     public int getAdminID() {
         return adminID;
     }
 
+
     public void setAdminID(int adminID) {
         this.adminID = adminID;
     }
+
 }

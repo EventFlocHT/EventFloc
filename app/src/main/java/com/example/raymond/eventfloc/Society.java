@@ -1,5 +1,7 @@
 package com.example.raymond.eventfloc;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
 
 /**
@@ -12,15 +14,19 @@ public class Society extends User {
     private String description;
     private String societyFaculty;
 
-    public Society(int userID, String userEmail, char password, int societyID, String societyName,
-                   Date approvalDate, String description, String societyFaculty) {
-        super(userID, userEmail, password);
+    public Society(int userID, String userEmail, String password, int societyID, String societyName,
+                   Date approvalDate, String description, String societyFaculty) throws InvalidKeySpecException, NoSuchAlgorithmException {
+        super(userEmail, password);
 
         this.societyID = societyID;
         this.societyName = societyName;
         this.approvalDate = approvalDate;
         this.description = description;
         this.societyFaculty = societyFaculty;
+    }
+
+    //temp
+    public Society() {
     }
 
     public String getSocietyFaculty() {

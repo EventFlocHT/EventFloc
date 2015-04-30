@@ -40,4 +40,6 @@ public class Attends {
     public void setAttendStatus(String attendStatus) {
         this.attendStatus = attendStatus;
     }
+
+
 }

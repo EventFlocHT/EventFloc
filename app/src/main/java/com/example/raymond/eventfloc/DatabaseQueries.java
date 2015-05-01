@@ -819,8 +819,10 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
             global.add(soc);
 
-            //------------------------------CAN SOMEONE CHECK MY LOGIC PLZ
-            cursor.moveToPosition(i + 1);
+            if(i < numRows){
+
+                cursor.moveToPosition(i + 1);
+            }
         }
 
         return global;
@@ -886,8 +888,11 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
             global.add(e);
 
-            //move the cursor to next position---------------PLEASE CHECK
-            cursor.moveToPosition(i + 1);
+            
+            if(i < numRows){
+
+                cursor.moveToPosition(i + 1);
+            }
         }
          return global;
     }

@@ -16,7 +16,7 @@ public class Society extends User {
 
     public Society(int userID, String userEmail, String password, int societyID, String societyName,
                    Date approvalDate, String description, String societyFaculty) throws InvalidKeySpecException, NoSuchAlgorithmException {
-        super(userEmail, password);
+        super(userEmail, password, 2);
 
         this.societyID = societyID;
         this.societyName = societyName;

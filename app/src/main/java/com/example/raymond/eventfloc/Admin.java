@@ -15,7 +15,7 @@ public class Admin extends User {
      * @param password
      */
     public Admin(String userEmail, String password) throws InvalidKeySpecException, NoSuchAlgorithmException {
-        super(userEmail, password);
+        super(userEmail, password, 0);
         //this.adminID = adminID;
     }
 

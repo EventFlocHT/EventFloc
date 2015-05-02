@@ -57,7 +57,7 @@ public class MainActivity extends ActionBarActivity {
 
      Student s = new Student("s@google.com", "hello", 76543, "Bob", "Bob");
 
-     
+
      System.out.println(s.toString());
 
      Student d= new Student("bob@gmail.com", "oijasd", 12345, "James", "James");

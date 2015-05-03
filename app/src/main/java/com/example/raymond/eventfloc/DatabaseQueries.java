@@ -12,6 +12,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -24,6 +25,7 @@ public class DatabaseQueries extends SQLiteOpenHelper {
     private static final SimpleDateFormat parser = new SimpleDateFormat("dd-MM-yyyy");
     private static final SimpleDateFormat parseTime = new SimpleDateFormat("hh:mm a");
     private static final SimpleDateFormat parseDateTime = new SimpleDateFormat("dd-MM-yyy hh:mm a");
+
 
     //--------------------------------CREATE TABLE STRINGS-------------------------------
     private static final String TABLE_USER = "User";
@@ -42,6 +44,7 @@ public class DatabaseQueries extends SQLiteOpenHelper {
     private static final String USER_ID = "user_id";
     private static final String USER_EMAIL = "user_email";
     private static final String USER_PASSWORD = "user_password";
+    private static final String USER_TYPE = "user_type";
 
 
     //---------------------------STUDENT TABLE--------------------------------------------
@@ -113,6 +116,7 @@ public class DatabaseQueries extends SQLiteOpenHelper {
             + USER_ID + " integer(7) primary key autoincrement, "
             + USER_EMAIL + " varchar2 NOT NULL, "
             + USER_PASSWORD + " varchar2 NOT NULL"
+            + USER_TYPE + " integer(1) NOT NULL"
             + " constraint password_ck check (password like '%[0-9]%' "
             + " and password like '%[A-Z]%' and len(password) >=8);";
 
@@ -187,6 +191,8 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
+
         //Create the tables in the database
         db.execSQL(CREATE_TABLE_USER);
         db.execSQL(CREATE_TABLE_ADMIN);
@@ -215,6 +221,7 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
         cv.put(USER_EMAIL, user.getUserEmail());
         cv.put(USER_PASSWORD, String.valueOf(user.getPassword()));
+        cv.put(USER_TYPE, user.getUserType());
 
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TABLE_USER, null, cv);
@@ -819,8 +826,12 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
             global.add(soc);
 
+<<<<<<< HEAD
             if(i < numRows){
 
+=======
+            if(i < numRows) {
+>>>>>>> origin/master
                 cursor.moveToPosition(i + 1);
             }
         }
@@ -888,16 +899,106 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
             global.add(e);
 
+<<<<<<< HEAD
             
             if(i < numRows){
 
                 cursor.moveToPosition(i + 1);
             }
+=======
+            if (i < numRows){
+                cursor.moveToPosition(i + 1); 
+            }
+
+>>>>>>> origin/master
         }
          return global;
     }
 
+//--------------------------------------------UPDATE------------------------------------------------
 
+    /**
+     * Update society profile details
+     * @param soceityID
+     * @param newSocietyName
+     * @param newDescription
+     */
+    public void updateSocietyProfile(int soceityID, String newSocietyName, String newDescription){
+        String update = "UPDATE " + TABLE_SOCIETY + " set " + SOCIETY_NAME + " = " + newSocietyName + ", "
+                + SOCIETY_DESC + " = " + newDescription + " where " + SOCIETY_ID + " = " + soceityID;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.execSQL(update);
+        db.close();
+    }
+
+    /**
+     * Update event details
+     */
+    public void updateEvent(int eventID, String newEventLocation, Date newEventDate, String newEventName,
+                            String newEventDesc, Date newEventStartTime,
+                            Date newEventEndTime){
+        String update = "UPDATE " + TABLE_EVENT + " set " + EVENT_NAME + " = " + newEventName + ", "
+                + EVENT_LOCATION + " = " + newEventLocation + ", "
+                + EVENT_DATE +  " = " + newEventDate + ", "
+                + EVENT_DESC  + " = " + newEventDesc + ", "
+                + EVENT_START_TIME  + " = " + newEventStartTime + ", "
+                + EVENT_END_TIME + " = " + newEventEndTime
+                + " where " + EVENT_ID + " = " + eventID;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.execSQL(update);
+        db.close();
+    }
+
+    /**
+     * Update event category
+     * @param eventID
+     * @param eventTypeID
+     */
+    public void updateEventCategory(int eventID, int eventTypeID){
+        deleteEventCategory(eventID);
+
+        String update = "INSERT INTO " + TABLE_HAS_CATEGORY + " VALUES (" + eventID + ", "
+                + eventTypeID + ");";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.execSQL(update);
+        db.close();
+    }
+
+    /**
+     * Delete all cetegories relating to one particular event
+     * @param eventID
+     */
+    public void deleteEventCategory(int eventID){
+        String delete = "DELETE FROM " + TABLE_HAS_CATEGORY + " where " + HAS_EVENT_ID
+                + " = \"" + eventID + "\";";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.execSQL(delete);
+        db.close();
+    }
+
+    /**
+     * Change attends status
+     * @param studentID
+     * @param eventID
+     * @param newAttendStatus
+     */
+    public void updateAttendStatus(int studentID, int eventID, String newAttendStatus){
+        String update = "UPDATAE " + TABLE_ATTENDS + " set " + ATTEND_STATUS + " = " + newAttendStatus
+        + " where " + STUDENT_ID + " = " + studentID + " AND " + EVENT_ID + " = " + eventID;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.execSQL(update);
+        db.close();
+    }
 
 
 

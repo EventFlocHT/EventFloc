@@ -13,7 +13,7 @@ public class Student extends User {
 
 
     public Student(String userEmail, String password, int studentID, String firstName, String lastName) throws InvalidKeySpecException, NoSuchAlgorithmException {
-        super(userEmail, password);
+        super(userEmail, password, 1);
         this.studentID = studentID;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -47,5 +47,10 @@ public class Student extends User {
         this.lastName = lastName;
     }
 
+    @Override
+    public String toString(){
+        String s = studentID + " " +firstName + " " + lastName + " userID: " + getUserID();
+        return s;
+    }
 
 }

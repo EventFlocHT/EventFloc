@@ -11,12 +11,14 @@ public class User {
     private int userID;
     private String userEmail;
     private String password;
+    private int userType;
 
     public User() {
     }
 
-    public User(String userEmail, String password) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    public User(String userEmail, String password,int userType ) throws InvalidKeySpecException, NoSuchAlgorithmException {
         this.userEmail = userEmail;
+        this.userType = userType;
         //this.password = password; //encryption
         this.password = PasswordHash.createHash(password);
     }
@@ -45,5 +47,11 @@ public class User {
         this.password = password;
     }
 
+    public int getUserType() {
+        return userType;
+    }
 
+    public void setUserType(int userType) {
+        this.userType = userType;
+    }
 }

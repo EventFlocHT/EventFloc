@@ -7,6 +7,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.TextView;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -14,12 +18,33 @@ import java.security.spec.InvalidKeySpecException;
 
 public class MainActivity extends ActionBarActivity {
 
+    EditText registerFirstName;
+    EditText registerLastName;
+    EditText registerEmail;
+    EditText registerPassword;
+    EditText registerConfirmPassword;
+    RadioButton registerSocietyType;
+    RadioButton registerStudentType;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        registerSetButtons();
+    }
+
+    /**
+     * Set variables
+     */
+    public void registerSetButtons(){
+        registerFirstName = (EditText) findViewById(R.id.editFirstname);
+        registerLastName = (EditText) findViewById(R.id.editLastname);
+        registerEmail = (EditText) findViewById(R.id.editEmail);
+        registerPassword = (EditText) findViewById(R.id.editPassword);
+        registerConfirmPassword = (EditText) findViewById(R.id.password_confirm);
+        registerStudentType = (RadioButton) findViewById(R.id.radioButton2);
+        registerSocietyType = (RadioButton) findViewById(R.id.radioButton2);
     }
 
 
@@ -45,22 +70,76 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
- public static void main (String[] args) throws InvalidKeySpecException, NoSuchAlgorithmException {
- EventType a = new EventType(4563, "Party");
- EventType b = new EventType(4652, "Free Food");
+    /**
+    public static void main(String[] args) throws InvalidKeySpecException, NoSuchAlgorithmException {
+        EventType a = new EventType(4563, "Party");
+        EventType b = new EventType(4652, "Free Food");
 
- String party = "Event ID " + a.getEventTypeID() + " is a " + a.getEventType();
- String freeFood = "Event ID " + b.getEventTypeID() + " is a " + b.getEventType();
+        String party = "Event ID " + a.getEventTypeID() + " is a " + a.getEventType();
+        String freeFood = "Event ID " + b.getEventTypeID() + " is a " + b.getEventType();
 
- System.out.println(party);
- System.out.println(freeFood);
+        System.out.println(party);
+        System.out.println(freeFood);
 
-     Student s = new Student("s@google.com", "hello", 76543, "Bob", "Bob");
+        Student s = new Student("s@google.com", "hello", 76543, "Bob", "Bob");
 
-     
-     System.out.println(s.toString());
 
-     Student d= new Student("bob@gmail.com", "oijasd", 12345, "James", "James");
-     System.out.println(d.toString());
- }
+        System.out.println(s.toString());
+
+        Student d = new Student("bob@gmail.com", "oijasd", 12345, "James", "James");
+        System.out.println(d.toString());
+    }**/
+
+
+
+    public Student fillStudent(View view) {
+        DatabaseQueries dq = new DatabaseQueries(this);
+
+        String firstName = registerFirstName.getText().toString();
+        String lastName = registerLastName.getText().toString();
+        String email = registerEmail.getText().toString();
+        String password = registerPassword.getText().toString();
+        String confirmPassword = registerConfirmPassword.getText().toString();
+        String userType;
+        if (registerStudentType.isSelected()) {
+            userType = registerStudentType.getText().toString();
+        } else if (registerSocietyType.isSelected()) {
+            userType = registerSocietyType.getText().toString();
+        }
+
+        Student s = new Student();
+        return s;
+
+
+
+    }
+
+
+    /**
+     * When Radio button selected, changes fields
+     * @param v
+     */
+    private void radioUserType(View v){
+
+        if(v == registerSocietyType){
+            registerFirstName.setHint("Society Name");
+            registerLastName.setVisibility(View.INVISIBLE);
+        }
+
+        else if(v == registerStudentType){
+            registerFirstName.setHint("First Name");
+            registerLastName.setVisibility(View.VISIBLE);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
 }

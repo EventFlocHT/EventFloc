@@ -17,6 +17,35 @@
         android:layout_weight="0.2" />
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_weight="0.04">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Society"
+            android:id="@+id/radioButton"
+            android:checked="false"
+            android:layout_gravity="center_horizontal"
+            android:onClick="radioUserType"
+            />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Student"
+            android:id="@+id/radioButton2"
+            android:layout_gravity="center_horizontal"
+            android:checked="false"
+            android:onClick="radioUserType"
+
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -72,39 +101,10 @@
             android:id="@+id/password_confirm"
             android:gravity="center_horizontal" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center">
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Society"
-                android:id="@+id/radioButton"
-                android:checked="false"
-                android:layout_gravity="center_horizontal"
-                android:onClick="radioUserType"
-                />
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Student"
-                android:id="@+id/radioButton2"
-                android:layout_gravity="center_horizontal"
-                android:checked="false"
-                android:onClick="radioUserType"
-
-                />
-
-        </LinearLayout>
-
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Register"
+            android:text="Submit"
             android:id="@+id/registerButton" />
 
 

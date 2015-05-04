@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Button;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -25,6 +26,8 @@ public class DatabaseQueries extends SQLiteOpenHelper {
     private static final SimpleDateFormat parser = new SimpleDateFormat("dd-MM-yyyy");
     private static final SimpleDateFormat parseTime = new SimpleDateFormat("hh:mm a");
     private static final SimpleDateFormat parseDateTime = new SimpleDateFormat("dd-MM-yyy hh:mm a");
+
+
 
 
     //--------------------------------CREATE TABLE STRINGS-------------------------------
@@ -80,7 +83,6 @@ public class DatabaseQueries extends SQLiteOpenHelper {
     private static final String EVENT_END_TIME = "event_end_time";
 
 
-
     //--------------------------ATTENDS TABLE----------------------------------------------
     private static final String ATTEND_STATUS = "attend_status";
     private static final String ATTEND_EVENT_ID = "event_id";
@@ -100,7 +102,6 @@ public class DatabaseQueries extends SQLiteOpenHelper {
     private static final String FOLLOW_SOCIETY_ID = "society_id";
 
 
-
     //------------------------EVENT TYPE TABLE----------------------------------------------
     private static final String EVENT_TYPE_ID = "event_type_id";
     private static final String EVENT_TYPE = "event_type";
@@ -111,15 +112,14 @@ public class DatabaseQueries extends SQLiteOpenHelper {
     private static final String HAS_EVENT_TYPE_ID = "event_type_id";
 
 
-
     private static final String CREATE_TABLE_USER = "create table " + TABLE_USER + " ("
             + USER_ID + " integer(7) primary key autoincrement, "
             + USER_EMAIL + " varchar2 NOT NULL, "
             + USER_PASSWORD + " varchar2 NOT NULL"
-            + USER_TYPE + " integer(1) NOT NULL"
-            + " constraint password_ck check (password like '%[0-9]%' "
-            + " and password like '%[A-Z]%' and len(password) >=8);";
-
+            + USER_TYPE + " integer(1) NOT NULL;";
+            //+ " constraint password_ck check (password like '%[0-9]%' "
+           // + " and password like '%[A-Z]%' and len(password) >=8);";
+    //-------------IF WE HAVE PASSWORD ENCRYPTION, WE DON'T NEED THIS RIGHT?--------------------
 
 
     private static final String CREATE_TABLE_STUDENT = "create table " + TABLE_STUDENT + " ("
@@ -166,7 +166,7 @@ public class DatabaseQueries extends SQLiteOpenHelper {
             + HAS_EVENT_TYPE_ID + " integer(7) foreign key references " + TABLE_EVENT_TYPE + "(event_type_id)); ";
 
     private static final String CREATE_TABLE_ATTENDS = "create table " + TABLE_ATTENDS + " ( "
-            + ATTEND_EVENT_ID + " integer(7) foreign key references " + TABLE_EVENT+ "(event_id), "
+            + ATTEND_EVENT_ID + " integer(7) foreign key references " + TABLE_EVENT + "(event_id), "
             + ATTEND_STUDENT_ID + " integer(7) foreign key references " + TABLE_STUDENT + "(student_id),"
             + ATTEND_STATUS + " varchar2);";
 
@@ -179,14 +179,11 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
 
     public DatabaseQueries(Context context) {
-        super(context, DB_NAME, null, DB_VERSION );
+        super(context, DB_NAME, null, DB_VERSION);
     }
 
 
-
-
     //******************DATABASE STUFF STARTS HERE****************************
-
 
 
     @Override
@@ -213,10 +210,11 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
     /**
      * Insert a new User
+     *
      * @param user
      * @return
      */
-    public void insertUser(User user){
+    public void insertUser(User user) {
         ContentValues cv = new ContentValues();
 
         cv.put(USER_EMAIL, user.getUserEmail());
@@ -231,17 +229,19 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
     /**
      * Insert a new Student
+     *
      * @param student
      * @return
      */
-    public void insertStudent(Student student){
+    public void insertStudent(Student student) {
         ContentValues cv = new ContentValues();
 
         insertUser(student);
 
         cv.put(STUDENT_ID, student.getStudentID());
         cv.put(STUDENT_USER_ID, student.getUserID());
-        cv.put(STUDENT_FIRSTNAME, student.getFirstName());;
+        cv.put(STUDENT_FIRSTNAME, student.getFirstName());
+        ;
         cv.put(STUDENT_LASTNAME, student.getLastName());
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -252,10 +252,11 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
     /**
      * Insert a new Society
+     *
      * @param society
      * @return
      */
-    public void insertSociety(Society society){
+    public void insertSociety(Society society) {
         ContentValues cv = new ContentValues();
 
 
@@ -274,10 +275,11 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
     /**
      * Insert new Admin
+     *
      * @param admin
      * @return
      */
-    public void insertAdmin(Admin admin){
+    public void insertAdmin(Admin admin) {
         ContentValues cv = new ContentValues();
 
         insertUser(admin);
@@ -290,10 +292,11 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
     /**
      * Insert a new Event
+     *
      * @param event
      * @return
      */
-    public void insertEvent(Event event){
+    public void insertEvent(Event event) {
         ContentValues cv = new ContentValues();
 
         cv.put(EVENT_NAME, event.getEventName());
@@ -310,16 +313,16 @@ public class DatabaseQueries extends SQLiteOpenHelper {
         db.close();
 
 
-
     }
 
 
     /**
      * Insert a new Comment
+     *
      * @param comment
      * @return
      */
-    public void insertComment(Comment comment){
+    public void insertComment(Comment comment) {
         ContentValues cv = new ContentValues();
 
         cv.put(COMMENT_USER_ID, comment.getUserID());
@@ -353,15 +356,15 @@ public class DatabaseQueries extends SQLiteOpenHelper {
     }
 
 
-
-    //------COMPOSITE ENTITY INSERTS-----
+    //-----------------------------------COMPOSITE ENTITY INSERTS-----------------------------------
 
 
     /**
      * When student follows society
+     *
      * @return
      */
-    public void insertFollows(FollowSociety follows){
+    public void insertFollows(FollowSociety follows) {
         ContentValues cv = new ContentValues();
 
         cv.put(FOLLOW_STUDENT_ID, follows.getStudentID());
@@ -374,9 +377,10 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
     /**
      * When society has event types
+     *
      * @return
      */
-    public void insertHasCategory(HasCategory has){
+    public void insertHasCategory(HasCategory has) {
         ContentValues cv = new ContentValues();
 
         cv.put(HAS_EVENT_ID, has.getEventID());
@@ -391,10 +395,11 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
     /**
      * New attend event
+     *
      * @param attends
      * @return
      */
-    public void insertAttends(Attends attends){
+    public void insertAttends(Attends attends) {
         ContentValues cv = new ContentValues();
 
         cv.put(ATTEND_EVENT_ID, attends.getEventID());
@@ -411,20 +416,21 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
     /**
      * Delete a user
+     *
      * @param userID
      * @return
      */
-    public boolean deleteUser(int userID){
-        boolean result= false;
+    public boolean deleteUser(int userID) {
+        boolean result = false;
         String query = "SELECT * from " + TABLE_USER + "where " + USER_ID + " = \""
                 + userID + "\";";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         User user = new User();
 
-        if(cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             user.setUserID(Integer.parseInt(cursor.getString(0)));
-            db.delete(TABLE_USER, USER_ID + " = ?", new String[] { String.valueOf(user.getUserID())});
+            db.delete(TABLE_USER, USER_ID + " = ?", new String[]{String.valueOf(user.getUserID())});
             cursor.close();
             result = true;
         }
@@ -460,10 +466,11 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
     /**
      * Delete society
+     *
      * @param societyID
      * @return
      */
-    public boolean deleteSociety(int societyID){
+    public boolean deleteSociety(int societyID) {
         boolean result = false;
         String query = "SELECT * from " + TABLE_SOCIETY + " where " + SOCIETY_ID + " = \""
                 + societyID + "\";";
@@ -476,7 +483,7 @@ public class DatabaseQueries extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
         Society society = new Society();
 
-        if(cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             society.setSocietyID(Integer.parseInt(cursor.getString(0)));
             db.delete(TABLE_SOCIETY, SOCIETY_ID + " = ?",
                     new String[]{String.valueOf(society.getSocietyID())});
@@ -494,9 +501,10 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
     /**
      * Delete Event
+     *
      * @param eventID
      */
-    public boolean deleteEvent(int eventID){
+    public boolean deleteEvent(int eventID) {
         boolean result = false;
         String query = "SELECT * from " + TABLE_EVENT + " where " + EVENT_ID + " = \""
                 + eventID + "\";";
@@ -512,7 +520,7 @@ public class DatabaseQueries extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
         Event event = new Event();
 
-        if(cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             event.setEventID(Integer.parseInt(cursor.getString(0)));
             db.delete(TABLE_EVENT, EVENT_ID + " = ?",
                     new String[]{String.valueOf(event.getEventID())});
@@ -529,10 +537,11 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
     /**
      * Delete a comment
+     *
      * @param commentID
      * @return
      */
-    public boolean deleteComment(int commentID){
+    public boolean deleteComment(int commentID) {
         boolean result = false;
         String query = "SELECT * from " + TABLE_COMMENT + " where " + COMMENT_ID + " = " + commentID + ";";
 
@@ -541,7 +550,7 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
         Comment comment = new Comment();
 
-        if(cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             comment.setCommentID(Integer.parseInt(cursor.getString(0)));
             db.delete(TABLE_COMMENT, COMMENT_ID + " = ?",
                     new String[]{String.valueOf(comment.getCommentID())});
@@ -558,24 +567,24 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
     /**
      * Find a user with userID
+     *
      * @param userID
      * @return
      */
-    public User getUser(int userID){
+    public User getUser(int userID) {
         String query = "SELECT * from " + TABLE_USER + " where " + USER_ID + " = \"" + userID + "\";";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         User user = new User();
 
 
-        if(cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             cursor.moveToFirst();
             user.setUserID(Integer.parseInt(cursor.getString(0)));
             user.setUserEmail(cursor.getString(1));
             user.setPassword(cursor.getString(2));
             cursor.close();
-        }
-        else{
+        } else {
             user = null;
         }
         db.close();
@@ -585,24 +594,24 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
     /**
      * Find a student with studentID
+     *
      * @param studentID
      * @return
      */
-    public Student getStudent(int studentID){
+    public Student getStudent(int studentID) {
         String query = "SELECT * from " + TABLE_STUDENT + " where " + STUDENT_ID + " = \"" + studentID + "\";";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         Student student = new Student();
 
-        if(cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             cursor.moveToFirst();
             student.setStudentID(Integer.parseInt(cursor.getString(0)));
             student.setUserID(Integer.parseInt(cursor.getString(1)));
             student.setFirstName(cursor.getString(2));
             student.setLastName(cursor.getString(3));
             cursor.close();
-        }
-        else{
+        } else {
             student = null;
         }
         db.close();
@@ -612,6 +621,7 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
     /**
      * Find a society
+     *
      * @param societyID
      * @return
      * @throws ParseException
@@ -623,8 +633,7 @@ public class DatabaseQueries extends SQLiteOpenHelper {
         Society society = new Society();
 
 
-
-        if(cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             cursor.moveToFirst();
             society.setSocietyID((Integer.parseInt(cursor.getString(0))));
             society.setUserID(Integer.parseInt(cursor.getString(1)));
@@ -634,8 +643,7 @@ public class DatabaseQueries extends SQLiteOpenHelper {
             society.setApprovalDate(parser.parse(myDate));
             society.setDescription(cursor.getString(4));
             society.setSocietyFaculty(cursor.getString(5));
-        }
-        else{
+        } else {
             society = null;
         }
         db.close();
@@ -645,6 +653,7 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
     /**
      * Get Event
+     *
      * @param eventID
      * @return
      * @throws ParseException
@@ -655,7 +664,7 @@ public class DatabaseQueries extends SQLiteOpenHelper {
         Cursor c = db.rawQuery(query, null);
         Event event = new Event();
 
-        if(c.moveToFirst()){
+        if (c.moveToFirst()) {
             c.moveToFirst();
             event.setEventID(Integer.parseInt(c.getString(0)));
             event.setEventName(c.getString(1));
@@ -672,8 +681,7 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
             String myEndTime = c.getString(8);
             event.setEventEndTime(parseTime.parse(myEndTime));
-        }
-        else{
+        } else {
             event = null;
 
         }
@@ -684,6 +692,7 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
     /**
      * Find a comment
+     *
      * @param commentID
      * @return
      * @throws ParseException
@@ -694,7 +703,7 @@ public class DatabaseQueries extends SQLiteOpenHelper {
         Cursor c = db.rawQuery(query, null);
         Comment comment = new Comment();
 
-        if(c.moveToFirst()){
+        if (c.moveToFirst()) {
             c.moveToFirst();
             comment.setCommentID(Integer.parseInt(c.getString(0)));
             comment.setUserID(Integer.parseInt(c.getString(1)));
@@ -703,8 +712,7 @@ public class DatabaseQueries extends SQLiteOpenHelper {
             String myDate = c.getString(3);
             comment.setCommentDate(parser.parse(myDate));
             comment.setCommentText(c.getString(4));
-        }
-        else{
+        } else {
             comment = null;
         }
         db.close();
@@ -712,10 +720,9 @@ public class DatabaseQueries extends SQLiteOpenHelper {
     }
 
 
-
-
     /**
      * Find user email
+     *
      * @param email
      * @return
      */
@@ -729,7 +736,7 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
         User user = new User();
 
-        if(cursor.moveToFirst()) {
+        if (cursor.moveToFirst()) {
             cursor.moveToFirst();
             user.setUserID(Integer.parseInt(cursor.getString(0)));
             user.setUserEmail(cursor.getString(1));
@@ -745,10 +752,9 @@ public class DatabaseQueries extends SQLiteOpenHelper {
     //------------------------------------LOGIN STUFF-----------------------------------------------
 
 
-
-
     /**
      * Login Request
+     *
      * @param email
      * @param password
      * @return
@@ -767,7 +773,7 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
         String storedPassword;
 
-        if(cursor.moveToFirst()) {
+        if (cursor.moveToFirst()) {
             cursor.moveToFirst();
             storedPassword = cursor.getString(0);
             cursor.close();
@@ -776,7 +782,7 @@ public class DatabaseQueries extends SQLiteOpenHelper {
         }
         db.close();
 
-        if(hashPassword.equals(storedPassword)) {
+        if (hashPassword.equals(storedPassword)) {
             correctPassword = true;
         } else {
             correctPassword = false;
@@ -785,12 +791,12 @@ public class DatabaseQueries extends SQLiteOpenHelper {
     }
 
 
-
     //---------------------------------------SEARCH-------------------------------------------------
 
 
     /**
      * Search a society on Society name or Society faculty
+     *
      * @param toSearch
      * @return
      * @throws ParseException
@@ -812,7 +818,7 @@ public class DatabaseQueries extends SQLiteOpenHelper {
         int numRows = cursor.getCount();
 
         //Loop to add row into the global arraylist
-        for(int i = 0; i < numRows; i++){
+        for (int i = 0; i < numRows; i++) {
             Society soc = new Society();
 
             soc.setSocietyID(Integer.parseInt(cursor.getString(0)));
@@ -826,104 +832,106 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
             global.add(soc);
 
-<<<<<<< HEAD
-            if(i < numRows){
 
-=======
-            if(i < numRows) {
->>>>>>> origin/master
-                cursor.moveToPosition(i + 1);
+            if (i < numRows) {
+
+
+                if (i < numRows) {
+
+                    cursor.moveToPosition(i + 1);
+                }
             }
-        }
 
+
+        }
         return global;
     }
 
-    /**
-     * Search an event on event name, event location, key words in description, or event type
-     * @param toSearch
-     * @return
-     * @throws ParseException
-     */
-    public List<Event> searchEvent(String toSearch) throws ParseException {
+        /**
+         * Search an event on event name, event location, key words in description, or event type
+         * @param toSearch
+         * @return
+         * @throws ParseException
+         */
+        public List<Event> searchEvent (String toSearch)throws ParseException {
 
-        List<Event> global = new ArrayList<Event>();
+            List<Event> global = new ArrayList<Event>();
 
-        //create a writable database
-        SQLiteDatabase db = this.getWritableDatabase();
+            //create a writable database
+            SQLiteDatabase db = this.getWritableDatabase();
 
-        //the query to be executed
-        String query = "SELECT e." + EVENT_ID + ", e." + EVENT_NAME + ", e." + EVENT_SOCIETY_ID + ", s." + SOCIETY_NAME + ", e."
-                + EVENT_LOCATION + ", e." + EVENT_LINK + ", e." + EVENT_START_TIME + ", e."
-                + EVENT_END_TIME + ", et." + EVENT_TYPE + " FROM " + TABLE_EVENT + " e JOIN "
-                + TABLE_HAS_CATEGORY + " h ON e." + EVENT_ID + " = h." + HAS_EVENT_ID
-                + " JOIN " + TABLE_EVENT_TYPE + " et ON h." + HAS_EVENT_TYPE_ID + " = et."
-                + EVENT_TYPE_ID + " JOIN " + TABLE_SOCIETY + " s ON e." + EVENT_SOCIETY_ID
-                + " = s." + SOCIETY_ID + " WHERE e." + EVENT_NAME + " LIKE '%" + toSearch + "%' OR"
-                + " e." + EVENT_LOCATION + " LIKE '%" + toSearch + "%' OR e." + EVENT_DESC + " LIKE"
-                + " '%" + toSearch + "%' OR et." + EVENT_TYPE + " LIKE '%" + toSearch + "%';";
-
-
-                //SELECT e.event_id, e.event_name, e.event_society_id, s.society_name e.event_location, e.event_date, e.event_desc, e.event_link, e.event_start_time, e.event_end_time, et.event_type
-                // FROM TABLE_EVENT e JOIN TABLE_HAS_CATEGORY h ON e.event_id = h.event_id
-                //                  JOIN TABLE_EVENT_TYPE et ON h.event_type_id = et.event_id
-                //                  JOIN TABLE_SOCIETY s ON e.event_society_id = s.society_id
-                // WHERE e.event_name LIKE %toSearch% OR e.event_location LIKE %toSearch% OR e.event_desc LIKE %toSearch% OR et.event_type LIKE %toSearch%;
-
-        //runs the query
-        Cursor cursor = db.rawQuery(query, null);
-        cursor.moveToFirst();
-        int numRows = cursor.getCount();
-
-        //for loop to add each event to the arraylist
-        for(int i = 0; i < numRows; i++){
-            Event e = new Event();
-
-            e.setEventID(Integer.parseInt(cursor.getString(0)));
-            e.setEventName(cursor.getString(1));
-            e.setSocietyID(Integer.parseInt(cursor.getString(2)));
-            e.setEventLocation(cursor.getString(4));
-
-            String myDate = cursor.getString(5);
-            e.setEventDate(parser.parse(myDate));
-            e.setEventDescription(cursor.getString(6));
-            e.setEventLink(cursor.getString(7));
+            //the query to be executed
+            String query = "SELECT e." + EVENT_ID + ", e." + EVENT_NAME + ", e." + EVENT_SOCIETY_ID + ", s." + SOCIETY_NAME + ", e."
+                    + EVENT_LOCATION + ", e." + EVENT_LINK + ", e." + EVENT_START_TIME + ", e."
+                    + EVENT_END_TIME + ", et." + EVENT_TYPE + " FROM " + TABLE_EVENT + " e JOIN "
+                    + TABLE_HAS_CATEGORY + " h ON e." + EVENT_ID + " = h." + HAS_EVENT_ID
+                    + " JOIN " + TABLE_EVENT_TYPE + " et ON h." + HAS_EVENT_TYPE_ID + " = et."
+                    + EVENT_TYPE_ID + " JOIN " + TABLE_SOCIETY + " s ON e." + EVENT_SOCIETY_ID
+                    + " = s." + SOCIETY_ID + " WHERE e." + EVENT_NAME + " LIKE '%" + toSearch + "%' OR"
+                    + " e." + EVENT_LOCATION + " LIKE '%" + toSearch + "%' OR e." + EVENT_DESC + " LIKE"
+                    + " '%" + toSearch + "%' OR et." + EVENT_TYPE + " LIKE '%" + toSearch + "%';";
 
 
-            String myStartTime = cursor.getString(8);
-            e.setEventStartTime(parseTime.parse(myStartTime));
+            //SELECT e.event_id, e.event_name, e.event_society_id, s.society_name e.event_location, e.event_date, e.event_desc, e.event_link, e.event_start_time, e.event_end_time, et.event_type
+            // FROM TABLE_EVENT e JOIN TABLE_HAS_CATEGORY h ON e.event_id = h.event_id
+            //                  JOIN TABLE_EVENT_TYPE et ON h.event_type_id = et.event_id
+            //                  JOIN TABLE_SOCIETY s ON e.event_society_id = s.society_id
+            // WHERE e.event_name LIKE %toSearch% OR e.event_location LIKE %toSearch% OR e.event_desc LIKE %toSearch% OR et.event_type LIKE %toSearch%;
 
-            String myEndTime = cursor.getString(9);
-            e.setEventEndTime(parseTime.parse(myEndTime));
+            //runs the query
+            Cursor cursor = db.rawQuery(query, null);
+            cursor.moveToFirst();
+            int numRows = cursor.getCount();
+
+            //for loop to add each event to the arraylist
+            for (int i = 0; i < numRows; i++) {
+                Event e = new Event();
+
+                e.setEventID(Integer.parseInt(cursor.getString(0)));
+                e.setEventName(cursor.getString(1));
+                e.setSocietyID(Integer.parseInt(cursor.getString(2)));
+                e.setEventLocation(cursor.getString(4));
+
+                String myDate = cursor.getString(5);
+                e.setEventDate(parser.parse(myDate));
+                e.setEventDescription(cursor.getString(6));
+                e.setEventLink(cursor.getString(7));
 
 
-            global.add(e);
+                String myStartTime = cursor.getString(8);
+                e.setEventStartTime(parseTime.parse(myStartTime));
 
-<<<<<<< HEAD
-            
-            if(i < numRows){
+                String myEndTime = cursor.getString(9);
+                e.setEventEndTime(parseTime.parse(myEndTime));
 
-                cursor.moveToPosition(i + 1);
+
+                global.add(e);
+
+
+                if (i < numRows) {
+
+                    cursor.moveToPosition(i + 1);
+                }
+
+                if (i > numRows) {
+                    cursor.moveToFirst();
+                }
+
+
             }
-=======
-            if (i < numRows){
-                cursor.moveToPosition(i + 1); 
-            }
-
->>>>>>> origin/master
+            return global;
         }
-         return global;
-    }
 
 //--------------------------------------------UPDATE------------------------------------------------
 
-    /**
-     * Update society profile details
-     * @param soceityID
-     * @param newSocietyName
-     * @param newDescription
-     */
-    public void updateSocietyProfile(int soceityID, String newSocietyName, String newDescription){
+        /**
+         * Update society profile details
+         * @param soceityID
+         * @param newSocietyName
+         * @param newDescription
+         */
+
+    public void updateSocietyProfile(int soceityID, String newSocietyName, String newDescription) {
         String update = "UPDATE " + TABLE_SOCIETY + " set " + SOCIETY_NAME + " = " + newSocietyName + ", "
                 + SOCIETY_DESC + " = " + newDescription + " where " + SOCIETY_ID + " = " + soceityID;
 
@@ -938,12 +946,12 @@ public class DatabaseQueries extends SQLiteOpenHelper {
      */
     public void updateEvent(int eventID, String newEventLocation, Date newEventDate, String newEventName,
                             String newEventDesc, Date newEventStartTime,
-                            Date newEventEndTime){
+                            Date newEventEndTime) {
         String update = "UPDATE " + TABLE_EVENT + " set " + EVENT_NAME + " = " + newEventName + ", "
                 + EVENT_LOCATION + " = " + newEventLocation + ", "
-                + EVENT_DATE +  " = " + newEventDate + ", "
-                + EVENT_DESC  + " = " + newEventDesc + ", "
-                + EVENT_START_TIME  + " = " + newEventStartTime + ", "
+                + EVENT_DATE + " = " + newEventDate + ", "
+                + EVENT_DESC + " = " + newEventDesc + ", "
+                + EVENT_START_TIME + " = " + newEventStartTime + ", "
                 + EVENT_END_TIME + " = " + newEventEndTime
                 + " where " + EVENT_ID + " = " + eventID;
 
@@ -955,10 +963,11 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
     /**
      * Update event category
+     *
      * @param eventID
      * @param eventTypeID
      */
-    public void updateEventCategory(int eventID, int eventTypeID){
+    public void updateEventCategory(int eventID, int eventTypeID) {
         deleteEventCategory(eventID);
 
         String update = "INSERT INTO " + TABLE_HAS_CATEGORY + " VALUES (" + eventID + ", "
@@ -972,9 +981,10 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
     /**
      * Delete all cetegories relating to one particular event
+     *
      * @param eventID
      */
-    public void deleteEventCategory(int eventID){
+    public void deleteEventCategory(int eventID) {
         String delete = "DELETE FROM " + TABLE_HAS_CATEGORY + " where " + HAS_EVENT_ID
                 + " = \"" + eventID + "\";";
 
@@ -986,13 +996,14 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
     /**
      * Change attends status
+     *
      * @param studentID
      * @param eventID
      * @param newAttendStatus
      */
-    public void updateAttendStatus(int studentID, int eventID, String newAttendStatus){
-        String update = "UPDATAE " + TABLE_ATTENDS + " set " + ATTEND_STATUS + " = " + newAttendStatus
-        + " where " + STUDENT_ID + " = " + studentID + " AND " + EVENT_ID + " = " + eventID;
+    public void updateAttendStatus(int studentID, int eventID, String newAttendStatus) {
+        String update = "UPDATE " + TABLE_ATTENDS + " set " + ATTEND_STATUS + " = " + newAttendStatus
+                + " where " + STUDENT_ID + " = " + studentID + " AND " + EVENT_ID + " = " + eventID;
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -1001,13 +1012,13 @@ public class DatabaseQueries extends SQLiteOpenHelper {
     }
 
 
+    //-------------------------------------GET ALL-------------------------------------------------
 
 
 
 
 
-
-    }
+}
 
 
 

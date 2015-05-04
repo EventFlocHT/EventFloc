@@ -1,6 +1,7 @@
 package com.example.raymond.eventfloc;
 
 import android.content.Context;
+import android.content.Intent;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -8,9 +9,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -18,33 +21,92 @@ import java.security.spec.InvalidKeySpecException;
 
 public class MainActivity extends ActionBarActivity {
 
-    EditText registerFirstName;
-    EditText registerLastName;
-    EditText registerEmail;
-    EditText registerPassword;
-    EditText registerConfirmPassword;
-    RadioButton registerSocietyType;
-    RadioButton registerStudentType;
+
+
+    private Button landingLoginButton;
+    private Button landingRegisterButton;
+    private EditText userName;
+    private EditText password;
+
+
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        registerSetButtons();
+        final DatabaseQueries dq = new DatabaseQueries(this);
+        landingSetButtons();
+
+        landingRegisterButton.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v){
+                Intent i = new Intent(MainActivity.this, RegisterActivity.class);
+                startActivityForResult(i, 0);
+            }
+        });
+
+        landingLoginButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                boolean successfulLogin;
+                String mUsername = userName.getText().toString();
+                String mPassword = password.getText().toString();
+                try {
+                   successfulLogin =  dq.requestLogin(mUsername, mPassword);
+                } catch (InvalidKeySpecException e) {
+                    e.printStackTrace();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                }
+
+                if(successfulLogin = true){
+                    //WHAT HAPPENS IF USER SUCCESSFULLY LOGS IN?
+                    setToast(true);
+                }
+                else if(successfulLogin = false){
+                    //WHAT HAPPENS IF UNSUCCESSFUL LOGIN?
+                    setToast(false);
+                }
+
+            }
+
+        });
+
+
+
     }
 
+
     /**
-     * Set variables
+     * Set the buttons and fields on landing page
      */
-    public void registerSetButtons(){
-        registerFirstName = (EditText) findViewById(R.id.editFirstname);
-        registerLastName = (EditText) findViewById(R.id.editLastname);
-        registerEmail = (EditText) findViewById(R.id.editEmail);
-        registerPassword = (EditText) findViewById(R.id.editPassword);
-        registerConfirmPassword = (EditText) findViewById(R.id.password_confirm);
-        registerStudentType = (RadioButton) findViewById(R.id.radioButton2);
-        registerSocietyType = (RadioButton) findViewById(R.id.radioButton2);
+    public void landingSetButtons(){
+        landingLoginButton = (Button)findViewById(R.id.loginButton);
+        landingRegisterButton = (Button)findViewById(R.id.registerButton);
+        userName = (EditText)findViewById(R.id.editEmail);
+        password = (EditText)findViewById(R.id.editPassword);
+
+    }
+
+
+    /**
+     * Set the toast message for successful or unsuccessful login
+     * @param loginStatus
+     */
+    public void setToast(boolean loginStatus){
+        int toastMessage = 0;
+
+        if(loginStatus = true){
+            toastMessage = R.string.successful_login;
+        }
+        else if (loginStatus = false){
+            toastMessage = R.string.unsuccessful_login;
+        }
+        Toast.makeText(MainActivity.this, toastMessage, Toast.LENGTH_LONG).show();
+
     }
 
 
@@ -92,45 +154,11 @@ public class MainActivity extends ActionBarActivity {
 
 
 
-    public Student fillStudent(View view) {
-        DatabaseQueries dq = new DatabaseQueries(this);
-
-        String firstName = registerFirstName.getText().toString();
-        String lastName = registerLastName.getText().toString();
-        String email = registerEmail.getText().toString();
-        String password = registerPassword.getText().toString();
-        String confirmPassword = registerConfirmPassword.getText().toString();
-        String userType;
-        if (registerStudentType.isSelected()) {
-            userType = registerStudentType.getText().toString();
-        } else if (registerSocietyType.isSelected()) {
-            userType = registerSocietyType.getText().toString();
-        }
-
-        Student s = new Student();
-        return s;
 
 
 
-    }
 
 
-    /**
-     * When Radio button selected, changes fields
-     * @param v
-     */
-    private void radioUserType(View v){
-
-        if(v == registerSocietyType){
-            registerFirstName.setHint("Society Name");
-            registerLastName.setVisibility(View.INVISIBLE);
-        }
-
-        else if(v == registerStudentType){
-            registerFirstName.setHint("First Name");
-            registerLastName.setVisibility(View.VISIBLE);
-        }
-    }
 
 
 

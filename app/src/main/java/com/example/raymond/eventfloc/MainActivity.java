@@ -32,12 +32,20 @@ public class MainActivity extends ActionBarActivity {
 
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final DatabaseQueries dq = new DatabaseQueries(this);
         landingSetButtons();
+
+        //automatically fill the username field with previously registered email
+       // Bundle extras = getIntent().getExtras();
+       // String email = extras.getString("username");
+       // userName.setText(email);
+
 
         landingRegisterButton.setOnClickListener(new View.OnClickListener(){
 
@@ -56,19 +64,26 @@ public class MainActivity extends ActionBarActivity {
                 String mPassword = password.getText().toString();
                 try {
                    successfulLogin =  dq.requestLogin(mUsername, mPassword);
+                    Log.d("LOGIN STATUS", "Successful Login");
+                   // Log.d("LOGIN ACCOUNT", dq.getUserEmail(mUsername).toString());
                 } catch (InvalidKeySpecException e) {
                     e.printStackTrace();
+                    Log.d("LOGIN STATUS", "Unsuccessful Login");
                 } catch (NoSuchAlgorithmException e) {
                     e.printStackTrace();
+                    Log.d("LOGIN STATUS", "Unsuccessful Login");
                 }
 
                 if(successfulLogin = true){
                     //WHAT HAPPENS IF USER SUCCESSFULLY LOGS IN?
-                    setToast(true);
+
+                    //login activity goes here
+                    //Intent i = new Intent(MainActivity.this, homeActivity);
+                    loginToast(true);
                 }
                 else if(successfulLogin = false){
                     //WHAT HAPPENS IF UNSUCCESSFUL LOGIN?
-                    setToast(false);
+                    loginToast(false);
                 }
 
             }
@@ -96,7 +111,7 @@ public class MainActivity extends ActionBarActivity {
      * Set the toast message for successful or unsuccessful login
      * @param loginStatus
      */
-    public void setToast(boolean loginStatus){
+    public void loginToast(boolean loginStatus){
         int toastMessage = 0;
 
         if(loginStatus = true){

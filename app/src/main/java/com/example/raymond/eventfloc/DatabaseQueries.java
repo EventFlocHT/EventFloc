@@ -113,68 +113,68 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
 
     private static final String CREATE_TABLE_USER = "create table " + TABLE_USER + " ("
-            + USER_ID + " integer(7) primary key autoincrement, "
+            + USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + USER_EMAIL + " varchar2 NOT NULL, "
-            + USER_PASSWORD + " varchar2 NOT NULL"
-            + USER_TYPE + " integer(1) NOT NULL;";
+            + USER_PASSWORD + " varchar2 NOT NULL, "
+            + USER_TYPE + " integer(1) NOT NULL );";
             //+ " constraint password_ck check (password like '%[0-9]%' "
            // + " and password like '%[A-Z]%' and len(password) >=8);";
     //-------------IF WE HAVE PASSWORD ENCRYPTION, WE DON'T NEED THIS RIGHT?--------------------
 
 
     private static final String CREATE_TABLE_STUDENT = "create table " + TABLE_STUDENT + " ("
-            + STUDENT_ID + " varchar primary key NOT NULL, "
-            + STUDENT_USER_ID + " integer foreign key references " + TABLE_USER + "(user_id) NOT NULL, "
+            + STUDENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + STUDENT_USER_ID + " integer references " + TABLE_USER + "(user_id) NOT NULL, "
             + STUDENT_FIRSTNAME + " varchar2(20) NOT NULL, "
-            + STUDENT_LASTNAME + " varchar2(20) NOT NULL);";
+            + STUDENT_LASTNAME + " varchar2(20) NOT NULL );";
 
 
     private static final String CREATE_TABLE_SOCIETY = "create table " + TABLE_SOCIETY + " ("
-            + SOCIETY_ID + " integer(7) primary key autoincrement, "
-            + SOCIETY_USER_ID + " integer(7) foreign key references " + TABLE_USER + "(user_id), "
+            + SOCIETY_ID + " integer primary key autoincrement, "
+            + SOCIETY_USER_ID + " integer(7) references " + TABLE_USER + "(user_id), "
             + SOCIETY_NAME + " varchar2(50) NOT NULL, "
-            + SOCIETY_APPROVAL_DATE + " date, "
+            + SOCIETY_APPROVAL_DATE + " integer, "
             + SOCIETY_DESC + " blob, "
             + SOCIETY_FACULTY + " varchar2(25));";
 
 
     private static final String CREATE_TABLE_ADMIN = "create table " + TABLE_ADMIN + " ( "
-            + ADMIN_ID + " integer(7) primary key autoincrement, "
-            + ADMIN_USER_ID + " integer(7) foreign key references " + TABLE_USER + "(user_id)); ";
+            + ADMIN_ID + " integer primary key autoincrement, "
+            + ADMIN_USER_ID + " integer(7) references " + TABLE_USER + "(user_id)); ";
 
     private static final String CREATE_TABLE_EVENT = "create table " + TABLE_EVENT + " ( "
-            + EVENT_ID + " integer(7) primary key autoincrement, "
+            + EVENT_ID + " integer primary key autoincrement, "
             + EVENT_NAME + " varchar2,"
-            + EVENT_SOCIETY_ID + " integer(7) foreign key references " + TABLE_SOCIETY + "(society_id),"
+            + EVENT_SOCIETY_ID + " integer(7) references " + TABLE_SOCIETY + "(society_id),"
             + EVENT_LOCATION + " varchar2,"
-            + EVENT_DATE + " date,"
+            + EVENT_DATE + " integer,"
             + EVENT_DESC + " varchar2,"
             + EVENT_LINK + " varchar2,"
-            + EVENT_START_TIME + " time,"
-            + EVENT_END_TIME + " time);";
+            + EVENT_START_TIME + " integer,"
+            + EVENT_END_TIME + " integer);";
 
     private static final String CREATE_TABLE_EVENT_TYPE = "create table " + TABLE_EVENT_TYPE + " ( "
-            + EVENT_TYPE_ID + " integer(7) primary key autoincrement, "
+            + EVENT_TYPE_ID + " integer primary key autoincrement, "
             + EVENT_TYPE + " varchar2);";
 
     private static final String CREATE_TABLE_FOLLOW_SOCIETY = "create table " + TABLE_FOLLOW_SOCIETY + " ( "
-            + FOLLOW_STUDENT_ID + " integer(7) foreign key references " + TABLE_STUDENT + "(student_id), "
-            + FOLLOW_SOCIETY_ID + " integer(7) foreign key references " + TABLE_SOCIETY + "(society_id)); ";
+            + FOLLOW_STUDENT_ID + " integer(7) references " + TABLE_STUDENT + "(student_id), "
+            + FOLLOW_SOCIETY_ID + " integer(7) references " + TABLE_SOCIETY + "(society_id)); ";
 
     private static final String CREATE_TABLE_HAS_CATEGORY = "create table " + TABLE_HAS_CATEGORY + " ( "
-            + HAS_EVENT_ID + " integer(7) foreign key references " + TABLE_EVENT + "(event_id), "
-            + HAS_EVENT_TYPE_ID + " integer(7) foreign key references " + TABLE_EVENT_TYPE + "(event_type_id)); ";
+            + HAS_EVENT_ID + " integer(7) references " + TABLE_EVENT + "(event_id), "
+            + HAS_EVENT_TYPE_ID + " integer(7) references " + TABLE_EVENT_TYPE + "(event_type_id)); ";
 
     private static final String CREATE_TABLE_ATTENDS = "create table " + TABLE_ATTENDS + " ( "
-            + ATTEND_EVENT_ID + " integer(7) foreign key references " + TABLE_EVENT + "(event_id), "
-            + ATTEND_STUDENT_ID + " integer(7) foreign key references " + TABLE_STUDENT + "(student_id),"
+            + ATTEND_EVENT_ID + " integer(7) references " + TABLE_EVENT + "(event_id), "
+            + ATTEND_STUDENT_ID + " integer(7) references " + TABLE_STUDENT + "(student_id),"
             + ATTEND_STATUS + " varchar2);";
 
     private static final String CREATE_TABLE_COMMENT = "create table " + TABLE_COMMENT + " ( "
-            + COMMENT_ID + " integer(7) primary key autoincrement, "
-            + COMMENT_USER_ID + " integer(7) foreign key references " + TABLE_USER + "(user_id), "
-            + COMMENT_EVENT_ID + " integer (7) foreign key references " + TABLE_EVENT + "(event_id)"
-            + COMMENT_DATE + " date, "
+            + COMMENT_ID + " integer primary key autoincrement, "
+            + COMMENT_USER_ID + " integer(7) references " + TABLE_USER + "(user_id), "
+            + COMMENT_EVENT_ID + " integer (7) references " + TABLE_EVENT + "(event_id), "
+            + COMMENT_DATE + " integer, "
             + COMMENT_TEXT + " blob);";
 
 
@@ -592,6 +592,31 @@ public class DatabaseQueries extends SQLiteOpenHelper {
     }
 
 
+
+    public User getUserEmail(String userEmail) {
+        String query = "SELECT * from " + TABLE_USER + " where " + USER_EMAIL + " = \"" + userEmail + "\";";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        User user = new User();
+
+
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            user.setUserID(Integer.parseInt(cursor.getString(0)));
+            user.setUserEmail(cursor.getString(1));
+            user.setPassword(cursor.getString(2));
+            cursor.close();
+        } else {
+            user = null;
+        }
+        db.close();
+        return user;
+    }
+
+
+
+
+
     /**
      * Find a student with studentID
      *
@@ -861,7 +886,7 @@ public class DatabaseQueries extends SQLiteOpenHelper {
             SQLiteDatabase db = this.getWritableDatabase();
 
             //the query to be executed
-            String query = "SELECT e." + EVENT_ID + ", e." + EVENT_NAME + ", e." + EVENT_SOCIETY_ID + ", s." + SOCIETY_NAME + ", e."
+            String query = "SELECT DISTINCT e." + EVENT_ID + ", e." + EVENT_NAME + ", e." + EVENT_SOCIETY_ID + ", s." + SOCIETY_NAME + ", e."
                     + EVENT_LOCATION + ", e." + EVENT_LINK + ", e." + EVENT_START_TIME + ", e."
                     + EVENT_END_TIME + ", et." + EVENT_TYPE + " FROM " + TABLE_EVENT + " e JOIN "
                     + TABLE_HAS_CATEGORY + " h ON e." + EVENT_ID + " = h." + HAS_EVENT_ID
@@ -1014,7 +1039,93 @@ public class DatabaseQueries extends SQLiteOpenHelper {
 
     //-------------------------------------GET ALL-------------------------------------------------
 
+    public List<Event> getAllEvents() throws ParseException {
+        SQLiteDatabase dq = this.getReadableDatabase();
+        List<Event> global = new ArrayList<Event>();
 
+        //does this need to be distinct? how do categories work?
+        String query = "SELECT DISTINCT e." + EVENT_ID + ", e." + EVENT_NAME + ", e." + EVENT_SOCIETY_ID + ", s." + SOCIETY_NAME + ", e."
+                + EVENT_LOCATION + ", e." + EVENT_LINK + ", e." + EVENT_START_TIME + ", e."
+                + EVENT_END_TIME + ", et." + EVENT_TYPE + " FROM " + TABLE_EVENT + " e JOIN "
+                + TABLE_HAS_CATEGORY + " h ON e." + EVENT_ID + " = h." + HAS_EVENT_ID
+                + " JOIN " + TABLE_EVENT_TYPE + " et ON h." + HAS_EVENT_TYPE_ID + " = et."
+                + EVENT_TYPE_ID + " JOIN " + TABLE_SOCIETY + " s ON e." + EVENT_SOCIETY_ID
+                + " = s." + SOCIETY_ID + ";";
+
+        Cursor cursor = dq.rawQuery(query, null);
+        int numRows = cursor.getCount();
+
+        //for loop to add each event to the arraylist
+        for (int i = 0; i < numRows; i++) {
+            Event e = new Event();
+
+            e.setEventID(Integer.parseInt(cursor.getString(0)));
+            e.setEventName(cursor.getString(1));
+            e.setSocietyID(Integer.parseInt(cursor.getString(2)));
+            e.setEventLocation(cursor.getString(4));
+
+            String myDate = cursor.getString(5);
+            e.setEventDate(parser.parse(myDate));
+            e.setEventDescription(cursor.getString(6));
+            e.setEventLink(cursor.getString(7));
+
+
+            String myStartTime = cursor.getString(8);
+            e.setEventStartTime(parseTime.parse(myStartTime));
+
+            String myEndTime = cursor.getString(9);
+            e.setEventEndTime(parseTime.parse(myEndTime));
+
+
+            global.add(e);
+
+
+            if (i < numRows) {
+
+                cursor.moveToPosition(i + 1);
+            }
+
+            if (i > numRows) {
+                cursor.moveToFirst();
+            }
+
+
+        }
+        return global;
+    }
+
+
+    public List<Society> getAllSociety() throws ParseException {
+        List<Society> global = new ArrayList<>();
+        SQLiteDatabase dq = this.getReadableDatabase();
+
+        String query = "SELECT * from " + TABLE_SOCIETY + ";";
+
+        Cursor c = dq.rawQuery(query, null);
+        int numRows = c.getCount();
+
+        for(int i  = 0; i < numRows; i++){
+            Society s = new Society();
+            s.setSocietyID(Integer.parseInt(c.getString(0)));
+            s.setUserID((Integer.parseInt(c.getString(1))));
+            s.setSocietyName(c.getString(2));
+            s.setApprovalDate(parser.parse(c.getString(3)));
+            s.setDescription(c.getString(4));
+            s.setSocietyFaculty(c.getString(5));
+
+            global.add(s);
+
+            if (i < numRows) {
+
+                c.moveToPosition(i + 1);
+            }
+
+            if (i > numRows) {
+                c.moveToFirst();
+            }
+        }
+        return global;
+    }
 
 
 

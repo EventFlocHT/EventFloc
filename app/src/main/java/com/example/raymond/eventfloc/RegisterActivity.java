@@ -35,6 +35,7 @@ public class RegisterActivity extends ActionBarActivity {
         registerSetButtons();
         final DatabaseQueries dq = new DatabaseQueries(this);
 
+
         //-----------CRASHES ON CLICK FOR SOME REASON-------------------
         registerSocietyType.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -56,12 +57,15 @@ public class RegisterActivity extends ActionBarActivity {
             @Override
             public void onClick(View v){
                 if(registerPassword == registerConfirmPassword){
+                    String email = " ";
+
                     if(registerStudentType.isSelected()){
 
                         //IS THIS RIGHT?
                         Student s = null;
                         try {
                             s = fillStudent(v);
+                            email = s.getUserEmail();
                         } catch (InvalidKeySpecException e) {
                             e.printStackTrace();
                         } catch (NoSuchAlgorithmException e) {
@@ -72,11 +76,13 @@ public class RegisterActivity extends ActionBarActivity {
                     }
                     else if (registerSocietyType.isSelected()){
                         Society s = fillSociety(v);
+                        email = s.getUserEmail();
                         dq.insertSociety(s);
                         System.out.println(s.toString());
                     }
                     passwordToast(true);
                     Intent i = new Intent(RegisterActivity.this, MainActivity.class);
+                   // i.putExtra("username", email );
                     startActivity(i);
                 }
                 else if (registerPassword != registerConfirmPassword){
@@ -150,6 +156,9 @@ public class RegisterActivity extends ActionBarActivity {
             userType = 1;
         } else if (registerSocietyType.isSelected()) {
             userType = 2;
+        }
+        else{
+            userType=1;
         }
 
         String hashedPassword;

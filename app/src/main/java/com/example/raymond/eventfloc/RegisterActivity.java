@@ -81,7 +81,7 @@ public class RegisterActivity extends ActionBarActivity {
                         System.out.println(s.toString());
                     }
                     passwordToast(true);
-                    Intent i = new Intent(RegisterActivity.this, MainActivity.class);
+                    Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
                    // i.putExtra("username", email );
                     startActivity(i);
                 }

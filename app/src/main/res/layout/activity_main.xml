@@ -1,62 +1,61 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:padding="20dp" android:weightSum="1">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:id="@+id/RelativeLayout">
 
-    <TextView
+    <TabHost
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="EventFloc"
-        android:id="@+id/textView"
-        android:textSize="30dp"
-        android:gravity="center"
-        android:layout_weight="0.8" />
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:weightSum="1"
-        android:id="@+id/LinearLayout">
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/editEmail"
-            android:layout_gravity="center_horizontal"
-            android:inputType="text"
-            android:gravity="center_horizontal"
-            android:hint="Email"
-            android:ems="10"/>
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:ems="10"
-            android:id="@+id/editPassword"
-            android:layout_gravity="center_horizontal"
-            android:hint="Password"
-            android:gravity="center_horizontal" />
+        android:layout_height="match_parent"
+        android:id="@+id/tabHost">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
 
-            <Button
-                android:layout_width="match_parent"
+            <HorizontalScrollView
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Login"
-                android:id="@+id/loginButton"
-                android:layout_weight="1" />
+                android:id="@+id/horizontalScrollView"
+                android:fillViewport="true">
 
-            <Button
+                <TabWidget
+                    android:id="@android:id/tabs"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"></TabWidget>
+            </HorizontalScrollView>
+
+            <FrameLayout
+                android:id="@android:id/tabcontent"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Register"
-                android:id="@+id/registerButton"
-                android:layout_weight="1" />
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/tab1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"></LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tab2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"></LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tab3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"></LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tab4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical" />
+
+            </FrameLayout>
         </LinearLayout>
-    </LinearLayout>
-</LinearLayout>
+    </TabHost>
+</RelativeLayout>

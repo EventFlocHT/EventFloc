@@ -27,6 +27,7 @@ public class RegisterActivity extends ActionBarActivity {
     RadioButton registerSocietyType;
     RadioButton registerStudentType;
     Button registerButton;
+    Button backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,14 +59,16 @@ public class RegisterActivity extends ActionBarActivity {
             public void onClick(View v){
                 if(registerPassword == registerConfirmPassword){
                     String email = " ";
+                    boolean success = false;
 
                     if(registerStudentType.isSelected()){
 
                         //IS THIS RIGHT?
                         Student s = null;
                         try {
-                            s = fillStudent(v);
+                            s = fillStudent();
                             email = s.getUserEmail();
+                            success = true;
                         } catch (InvalidKeySpecException e) {
                             e.printStackTrace();
                         } catch (NoSuchAlgorithmException e) {
@@ -79,11 +82,18 @@ public class RegisterActivity extends ActionBarActivity {
                         email = s.getUserEmail();
                         dq.insertSociety(s);
                         System.out.println(s.toString());
+                        success = true;
                     }
-                    passwordToast(true);
-                    Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
-                   // i.putExtra("username", email );
-                    startActivity(i);
+
+                    if(success = true){
+                        passwordToast(true);
+
+                    }
+                    else if (success = false){
+                        passwordToast(false);
+                    }
+
+
                 }
                 else if (registerPassword != registerConfirmPassword){
                     //WHAT HAPPENS IF PASSWORDS ENTERED DON'T MATCH?
@@ -91,8 +101,14 @@ public class RegisterActivity extends ActionBarActivity {
                     //-------------DOESN'T WORK. ALWAYS SHOWS NON-MATCHING PASSWORD TOAST-----------
                     passwordToast(false);
                 }
+            }
+        });
 
 
+        backButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                startLoginActivity();
             }
         });
 
@@ -134,16 +150,17 @@ public class RegisterActivity extends ActionBarActivity {
         registerStudentType = (RadioButton) findViewById(R.id.radioButton2);
         registerSocietyType = (RadioButton) findViewById(R.id.radioButton2);
         registerButton = (Button)findViewById(R.id.registerButton);
+        backButton = (Button)findViewById(R.id.backButtonRegister);
     }
 
 
     /**
      * Creates a student with the filled in registration form
      *
-     * @param view
+     *
      * @return
      */
-    public Student fillStudent(View view) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    public Student fillStudent() throws InvalidKeySpecException, NoSuchAlgorithmException {
         DatabaseQueries dq = new DatabaseQueries(this);
 
         String firstName = registerFirstName.getText().toString();
@@ -183,7 +200,7 @@ public class RegisterActivity extends ActionBarActivity {
      *
      * @param v
      */
-    private void radioUserType(View v) {
+    public void radioUserType(View v) {
 
         if (v == registerSocietyType) {
             registerFirstName.setHint("Society Name");
@@ -195,6 +212,13 @@ public class RegisterActivity extends ActionBarActivity {
        }
     }
 
+    /**
+     * Start the activity
+     */
+    public void startLoginActivity(){
+        Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
+        RegisterActivity.this.startActivity(i);
+    }
 
     /**
      * Gets societ details from filled out registration form
@@ -202,7 +226,7 @@ public class RegisterActivity extends ActionBarActivity {
      * @param v
      * @return
      */
-    private Society fillSociety(View v) {
+    public Society fillSociety(View v) {
         DatabaseQueries dq = new DatabaseQueries(this);
 
         String societyName = registerFirstName.getText().toString();

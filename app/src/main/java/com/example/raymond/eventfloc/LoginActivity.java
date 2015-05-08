@@ -56,7 +56,10 @@ public class LoginActivity extends ActionBarActivity {
                 String mPassword = password.getText().toString();
                 try {
                     successfulLogin =  dq.requestLogin(mUsername, mPassword);
-                    Log.d("LOGIN STATUS", "Successful Login");
+                    if(successfulLogin = true){
+
+                        Log.d("LOGIN STATUS", "Successful Login");
+                    }
                     // Log.d("LOGIN ACCOUNT", dq.getUserEmail(mUsername).toString());
 
                 } catch (InvalidKeySpecException e) {

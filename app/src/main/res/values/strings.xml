@@ -5,6 +5,6 @@
     <string name="action_settings">Settings</string>
     <string name="matching_password">Registration Success!</string>
     <string name="nonmatching_password">Passwords don\'t match!"</string>
-    <string name="successful_login">Success! Logging in...</string>
+    <string name="successful_login">Success! Logging in...OIJOIJODIJSDF</string>
     <string name="unsuccessful_login">Please check your password again or register if you do not have an account</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.raymond.eventfloc;
 
+//import android.content.ContentValues;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -241,7 +242,6 @@ public class DatabaseQueries extends SQLiteOpenHelper {
         cv.put(STUDENT_ID, student.getStudentID());
         cv.put(STUDENT_USER_ID, student.getUserID());
         cv.put(STUDENT_FIRSTNAME, student.getFirstName());
-        ;
         cv.put(STUDENT_LASTNAME, student.getLastName());
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -789,7 +789,7 @@ public class DatabaseQueries extends SQLiteOpenHelper {
     public boolean requestLogin(String email, String password) throws InvalidKeySpecException, NoSuchAlgorithmException {
         boolean correctPassword = false;
         String hashPassword = PasswordHash.createHash(password);
-        String query = "Select " + USER_PASSWORD + " FROM " + TABLE_USER + " WHERE "
+        String query = "Select " + USER_PASSWORD + ", " + USER_EMAIL + " FROM " + TABLE_USER + " WHERE "
                 + USER_EMAIL + " = \"" + email + "\";";
 
         SQLiteDatabase db = this.getWritableDatabase();
